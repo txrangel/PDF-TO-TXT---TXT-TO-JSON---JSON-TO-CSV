@@ -5,7 +5,7 @@ from utils.file_generation import parse_json_to_csv, parse_json_to_txt
 
 if __name__ == "__main__":
     pdf_path    = input("Digite o caminho completo do arquivo PDF: ")
-    output_dir  = input("Digite o diretório para salvar o CSV: ")
+    output_dir  = input("Digite o diretório para salvar o arquivo: ")
     
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
