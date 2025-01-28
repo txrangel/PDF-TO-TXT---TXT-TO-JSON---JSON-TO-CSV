@@ -1,12 +1,14 @@
 # Conversor de PDF para CSV
 
-Este repositório contém um script em Python que processa arquivos PDF de pedidos de compra, extrai informações estruturadas e gera um arquivo CSV formatado com os dados extraídos.
+Este repositório contém um script em Python que processa arquivos PDF de pedidos de compra, extrai informações estruturadas e gera um arquivo CSV/TXT formatado com os dados extraídos.
 
 ## Funcionalidades
 
-1. **Extração de texto do PDF**: O script utiliza a biblioteca `pdfplumber` para extrair o conteúdo textual do PDF.
-2. **Conversão para JSON**: O texto extraído é processado para identificar campos como CNPJ, pedido, produtos e outras informações relevantes.
-3. **Geração de CSV**: Os dados estruturados são formatados e exportados para um arquivo CSV com delimitador `;`.
+1. **Extração de texto do PDF**: O script utiliza a biblioteca `pdfplumber` para extrair o conteúdo textual do PDF no método ``extract_text_from_pdf``.
+2. **Conversão para JSON**: O texto extraído é processado para identificar campos como CNPJ, pedido, produtos e outras informações relevantes através do método ``txt_to_json``.
+3. **Geração de Arquivo**
+   - Os dados estruturados são formatados e exportados para um arquivo CSV com delimitador `;` pelo método ``parse_json_to_csv``.
+   - Os dados estruturados são formatados e exportados para um arquivo TXT com delimitador `;` pelo método ``parse_json_to_txt``.
 
 ## Tecnologias Utilizadas
 
@@ -55,11 +57,15 @@ Este repositório contém um script em Python que processa arquivos PDF de pedid
 3. O script irá:
    - Extrair o texto do PDF.
    - Converter os dados para JSON.
-   - Gerar um arquivo CSV no formato desejado.
+   - Gerar um arquivo TXT ou CSV com os itens sendo separados por ``;``
 
-4. Verifique a saída no diretório especificado. O arquivo CSV terá o nome baseado no arquivo PDF original e a data/hora de execução:
+4. Verifique a saída no diretório especificado. O arquivo CSV/TXT terá o nome baseado no arquivo PDF original e a data/hora de execução:
    ```plaintext
    spc26-ped.16343_20250122_123456.csv
+   ```
+   OU
+   ```plaintext
+   spc26-ped.16343_20250122_123456.txt
    ```
 
 ## Estrutura do CSV
@@ -75,22 +81,20 @@ O arquivo CSV gerado terá as seguintes colunas:
 - `quantidade`
 - `valor`
 - Coluna vazia (`;` reservado)
-- `data de entrega`
 - `não mapeado`
+- `data de entrega`
 - `tipo de frete`
 - `operacao`
 
 ## Exemplo de Saída
 
 ```csv
-cnpj;pedido cliente;cod produto cliente;codigo de barras;descrição do produto;especificações do produto;quantidade;valor;;data de entrega;não mapeado;tipo de frete;operacao
-75315333009408;145924;61607186;00000000000000;GRANOLA VILLAMAR LIGHT;CXA 0001X0012X1KG;000028;0000021758;;12122024;0000000000;CIF;COMPRA
-75315333034194;145925;61608145;00000000000000;GRANOLA VILLAMAR TRADICIONAL;CXA 0001X0012X1KG;000084;0000021758;;12122024;0000000000;CIF;COMPRA
+cnpj;pedido cliente;cod produto cliente;codigo de barras;descrição do produto;especificações do produto;quantidade;valor;;não mapeado;data de entrega;tipo de frete;operacao
+75315333009408;145924;61607186;00000000000000;PRODUTO 1;CXA 0001X0012X1KG;000028;0000021758;;12122024;13122024;CIF;COMPRA
 ```
 
 ## Personalização
 
-- Ajuste os campos fixos, como `pedido cliente`, `valor` e `data de entrega`, conforme necessário.
 - Modifique as expressões regulares na função `txt_to_json` para adaptar a estrutura do PDF a outros formatos.
 
 ## Contribuição
