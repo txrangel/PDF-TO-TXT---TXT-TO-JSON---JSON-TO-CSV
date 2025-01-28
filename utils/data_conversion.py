@@ -1,33 +1,7 @@
 import re
 import json
-import csv
-import os
-import pdfplumber
-from datetime import datetime
 
-#Remove caracteres de controle e formata o texto.
-def clean_text(text):
-    text = re.sub(r'\x1b\[.*?m|\033&.*?T', '', text)  # Remove caracteres de controle
-    text = re.sub(r'\s+', ' ', text)  # Remove múltiplos espaços
-    return text.strip()
-
-# Extrai texto estruturado de um arquivo PDF e retorna um array com base_name e texto.
-def extract_text_from_pdf(pdf_path):
-    if not os.path.exists(pdf_path):
-        print(f"O arquivo {pdf_path} não foi encontrado.")
-        return []
-    try:
-        with pdfplumber.open(pdf_path) as pdf:
-            text = ""
-            for page in pdf.pages:
-                page_text = clean_text(page.extract_text() or "")
-                text += page_text + "\n\n"
-        base_name = os.path.basename(pdf_path).replace(".pdf", "")
-        return [base_name, text]
-    except Exception as e:
-        print(f"Erro ao processar o PDF: {e}")
-        return []
-        
+#Converte o texto recebido para um JSON seguindo o padrão do PDF do atacadão
 def txt_to_json(texto):
     try:
         pedido_cliente = re.search(r"Numero: (\d+)", texto).group(1)
@@ -133,42 +107,3 @@ def ajustar_campos(item):
             "tipo de frete": "",
             "operacao": ""
         }
-
-def parse_json_to_csv(saida_json, base_name, output_dir):
-    try:
-        dados_processados = [ajustar_campos(item) for item in json.loads(saida_json)]
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        csv_filename = os.path.join(output_dir, f"{base_name}_{timestamp}.csv")
-        with open(csv_filename, "w", newline="", encoding="utf-8") as csvfile:
-            writer = csv.DictWriter(csvfile, fieldnames=dados_processados[0].keys(), delimiter=';')
-            for row in dados_processados:
-                writer.writerow(row)
-        print(f"CSV gerado com sucesso: {csv_filename}")
-    except Exception as e:
-        print(f"Erro ao processar os dados: {e}")
-        
-def parse_json_to_txt(saida_json, base_name, output_dir):
-    try:
-        dados_processados = [ajustar_campos(item) for item in json.loads(saida_json)]
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        txt_filename = os.path.join(output_dir, f"{base_name}_{timestamp}.txt")
-        with open(txt_filename, "w", encoding="utf-8") as txtfile:
-            for row in dados_processados:
-                linha = ";".join(str(value) for value in row.values())
-                txtfile.write(linha + "\n")  
-        print(f"TXT gerado com sucesso: {txt_filename}")
-    except Exception as e:
-        print(f"Erro ao processar os dados: {e}")
-
-    
-if __name__ == "__main__":
-    pdf_path = input("Digite o caminho completo do arquivo PDF: ")
-    output_dir = input("Digite o diretório para salvar o CSV: ")
-    
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-    arraytexto  = extract_text_from_pdf(pdf_path)
-    texto       = arraytexto[1].replace("\n", " ")
-    jsonretorno = txt_to_json(texto)
-    #parse_json_to_csv(jsonretorno,arraytexto[0],output_dir)
-    parse_json_to_txt(jsonretorno,arraytexto[0],output_dir)
