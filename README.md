@@ -73,23 +73,23 @@ Este repositório contém um script em Python que processa arquivos PDF de pedid
 O arquivo CSV gerado terá as seguintes colunas:
 
 - `cnpj`
-- `pedido cliente`
-- `cod produto cliente`
-- `codigo de barras`
-- `descrição do produto`
-- `especificações do produto`
+- `pedido_cliente`
+- `cod_produto_cliente`
+- `codigo_barras`
+- `descricao_produto`
+- `especificacoes_produto`
 - `quantidade`
 - `valor`
 - Coluna vazia (`;` reservado)
-- `não mapeado`
-- `data de entrega`
-- `tipo de frete`
+- `data_pedido`
+- `data_entrega`
+- `tipo_frete`
 - `operacao`
 
 ## Exemplo de Saída
 
 ```csv
-cnpj;pedido cliente;cod produto cliente;codigo de barras;descrição do produto;especificações do produto;quantidade;valor;;não mapeado;data de entrega;tipo de frete;operacao
+cnpj;pedido_cliente;cod_produto_cliente;codigo_barras;descricao_produto;especificacoes_produto;quantidade;valor;;data_pedido;data_entrega;tipo_frete;operacao
 75315333009408;145924;61607186;00000000000000;PRODUTO 1;CXA 0001X0012X1KG;000028;0000021758;;12122024;13122024;CIF;COMPRA
 ```
 
